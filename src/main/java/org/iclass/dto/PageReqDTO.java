@@ -1,8 +1,6 @@
 package org.iclass.dto;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -10,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PageReqDTO {
-		private int page =1 ;		// 요청페이지
+		private int page =1 ;		// 요청(현재)페이지
 		private int pageSize = 10;	// 페이지의 글개수
 		private int startNo;	// 페이지 글목록의 시작 rownum
 		private int endNo;		// 페이지 글목록의 마지막 rownum

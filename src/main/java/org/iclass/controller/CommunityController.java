@@ -1,7 +1,9 @@
 package org.iclass.controller;
 
+import java.util.Map;
+
 import org.iclass.dto.CommunityDTO;
-import org.iclass.dto.PageReqDTO;
+import org.iclass.service.CommunityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,22 +11,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
 @RequestMapping("/community")
+@RequiredArgsConstructor
 public class CommunityController {
+	
+	private final CommunityService service;
 	
 	@GetMapping("/list")
 	public String list(@RequestParam(defaultValue = "1")
-			int page, String columns, String keyword) {
-		
+			int page, String columns, String keyword,Model model) {
+		Map<String,Object> map = service.pageSearchList(page);
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("pageDto", map.get("pageDto"));
 		return "community/list";
 	}
 	
 	@GetMapping("/write")   //글쓰기 화면
-	public String write(int page) {
+	public String write(@RequestParam(defaultValue = "1") int page) {
 		
 		return "community/write";
 	}
@@ -36,7 +44,8 @@ public class CommunityController {
 	}
 	
 	@GetMapping("/modify")  //글수정 화면
-	public String modify(int page) {
+	public String modify(int idx,
+			@RequestParam(defaultValue = "1") int page) {
 		
 		return "community/modify";
 	}
@@ -48,10 +57,12 @@ public class CommunityController {
 		return "redirect:modify";
 	}
 	
-	
+	//  글읽기 도전!!
 	@GetMapping("/read")
 	public String read(int idx,int page, Model model) {
-		
+		CommunityDTO dto = service.read(idx);
+		model.addAttribute("dto", dto);
+		model.addAttribute("page", page);
 		return "community/read";
 	}
 	
